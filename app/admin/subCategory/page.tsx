@@ -8,14 +8,8 @@ import SubCategoryTable from './SubCategoryTable';
 import BackButton from '@/components/BackButton';
 import { describe } from 'node:test';
 import { SubCategory } from '@/app/types/subcategory';
+import { Category } from '@/app/types/category';
 
-interface Category {
-  id: number,
-  name: string,
-  description: string,
-  image_url: string,
-  created_at: string
-}
 const SubCategoryPage: React.FC = () => {
   const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -29,7 +23,7 @@ const SubCategoryPage: React.FC = () => {
   }, []);
   const fetchCategories = async () => {
     try {
-      const res = await fetch("http://localhost:4000/api/category");
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/category`);
       const data = await res.json();
       setCategories(data);
     } catch (err) {
@@ -39,7 +33,7 @@ const SubCategoryPage: React.FC = () => {
 
   const fetchSubCategories = async () => {
     try {
-      const res = await fetch("http://localhost:4000/api/subcategory");
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/subcategory`);
       const data = await res.json();
       setSubCategories(data);
     } catch (err) {
@@ -51,26 +45,70 @@ const SubCategoryPage: React.FC = () => {
     try {
       const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-      const res = await fetch('http://localhost:4000/api/subcategory', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/subcategory`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,
         },
-        body: JSON.stringify(data), // 👈 Modal-аас ирсэн JSON
+        body: JSON.stringify(data),
       });
 
       if (!res.ok) throw new Error('Дэд ангилал нэмэхэд алдаа гарлаа');
-      else {
-        const data = await res.json();
-        setSubCategories(prev => [...prev, data]);
-      }
+
+      const newSubCategory = await res.json();
+
+      // 🔍 categories state-ээс нэрийг хайж олоод холбоно
+      const category = categories.find(c => c.category_id === data.category_id);
+
+      const subWithCategory = {
+        ...newSubCategory,
+        category_name: category ? category.category_name : 'Тодорхойгүй',
+      };
+
+      setSubCategories(prev => [...prev, subWithCategory]);
       setOpenModal(false);
-      await fetchCategories(); // жагсаалтаа дахин татах
     } catch (error) {
       console.error(error);
     }
   };
+
+  // const handleAddCategory = async (data: { name: string; description?: string; category_id: number }) => {
+  //   try {
+  //     const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+  //     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/subcategory`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${user.token}`,
+  //       },
+  //       body: JSON.stringify(data), // 👈 Modal-аас ирсэн JSON
+  //     });
+
+  //     if (!res.ok) throw new Error('Дэд ангилал нэмэхэд алдаа гарлаа');
+  //     else {
+  //       const data = await res.json();
+  //       setSubCategories(prev => [...prev, data]);
+  //     }
+  //     const newSubCategory = await res.json();
+  //     // ✅ UI дээр шууд тухайн category дотор шинэ subcategory-г нэмэх
+  //     setCategories(prev =>
+  //       prev.map(cat =>
+  //         cat.category_id === data.category_id
+  //           ? {
+  //             ...cat,
+  //             subcategories: [...(cat.subcategories || []), newSubCategory],
+  //           }
+  //           : cat
+  //       )
+  //     );
+  //     setOpenModal(false);
+  //     await fetchCategories(); // жагсаалтаа дахин татах
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
   const handleEditClick = (cat: SubCategory) => {
     setEditSubCategory(cat);
     setEditModalOpen(true);
@@ -79,7 +117,7 @@ const SubCategoryPage: React.FC = () => {
   const handleUpdateCategory = async (id: number, data: { name: string; description?: string; category_id: number }) => {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-    const res = await fetch(`http://localhost:4000/api/subcategory/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/subcategory/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -101,7 +139,7 @@ const SubCategoryPage: React.FC = () => {
       <div className="flex justify-between items-center bg-white sticky top-0 z-10 p-2 mb-4">
         <BackButton text="Буцах" link="/admin/dashboard" />
         <button
-          className="bg-[#4c9a2a] hover:opacity-90 text-white font-bold py-2 px-4 rounded text-xs flex items-center gap-2"
+          className="bg-yellow-600 hover:opacity-90 text-white font-bold py-2 px-4 rounded text-xs flex items-center gap-2"
           onClick={() => setOpenModal(true)}
         >
           <Plus size={15} /> Нэмэх
@@ -116,7 +154,7 @@ const SubCategoryPage: React.FC = () => {
           if (!confirmed) return;
           try {
             const user = JSON.parse(localStorage.getItem('user') || '{}');
-            const res = await fetch(`http://localhost:4000/api/subcategory/${id}`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/subcategory/${id}`, {
               method: 'DELETE',
               headers: { Authorization: `Bearer ${user.token}` },
             });

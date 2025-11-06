@@ -4,13 +4,13 @@ import React, { useState, FormEvent, ChangeEvent, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-interface AddStateModalProps {
+interface AddTypeModalProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (data: { name: string,  description:string}) => void;
 }
 
-const AddStateModal = ({ open, onClose, onSubmit }: AddStateModalProps) => {
+const AddTypeModal = ({ open, onClose, onSubmit }: AddTypeModalProps) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
@@ -29,7 +29,7 @@ const AddStateModal = ({ open, onClose, onSubmit }: AddStateModalProps) => {
     e.preventDefault();
 
     if (!name.trim()) {
-      setError('Дэд ангиллын нэрийг заавал оруулна уу');
+      setError('нэр оруулна уу');
       return;
     }
 
@@ -69,7 +69,7 @@ const AddStateModal = ({ open, onClose, onSubmit }: AddStateModalProps) => {
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-gray-800">Хэмжих нэгж нэмэх</h2>
+          <h2 className="text-xl font-semibold text-gray-800">төрөл нэмэх</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-700 font-bold text-2xl"
@@ -84,7 +84,7 @@ const AddStateModal = ({ open, onClose, onSubmit }: AddStateModalProps) => {
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
-            placeholder="Нэр"
+            placeholder="төрөл нэр"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
@@ -101,7 +101,7 @@ const AddStateModal = ({ open, onClose, onSubmit }: AddStateModalProps) => {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-700 text-white font-bold py-2 px-4 rounded-lg hover:opacity-90 transition flex justify-center items-center"
+            className="w-full bg-gradient-to-r from-[#d49943] via-[#dfa243] to-[#edad45] text-white font-bold py-2 px-4 rounded-lg hover:opacity-90 transition flex justify-center items-center"
           >
             {loading && <span className="animate-spin border-2 border-white border-t-transparent rounded-full w-5 h-5 mr-2"></span>}
             {loading ? 'Нэмэх...' : 'Нэмэх'}
@@ -112,4 +112,4 @@ const AddStateModal = ({ open, onClose, onSubmit }: AddStateModalProps) => {
   );
 };
 
-export default AddStateModal;
+export default AddTypeModal;

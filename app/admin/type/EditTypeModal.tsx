@@ -3,75 +3,55 @@
 import React, { useState, useEffect, FormEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { SubCategory } from '@/app/types/subcategory';
 
 
-interface Category {
+
+interface Type {
   id: number;
   name: string;
   description?: string;
-  category_id: number;
-  image_url?: string;
-  created_at?: string;
+
 }
-interface EditSubCategoryModalProps {
+interface EditTypeModalProps {
   open: boolean;
   onClose: () => void;
-  category: SubCategory | null; 
-  onSubmit: (id: number, data: { name: string; description?: string; category_id: number }) => Promise<void>;
+  type?: Type | null;
+  onSubmit: ( id: number, name: string, description?: string ) => Promise<void>;
 }
 
-const EditSubCategoryModal: React.FC<EditSubCategoryModalProps> = ({
+const EditTypeModal: React.FC<EditTypeModalProps> = ({
   open,
+  type,
   onClose,
-  category,
   onSubmit,
 }) => {
-  const [categories, setCategories] = useState<Category[]>([]);
+//   const [states, setStates] = useState<State[]>([]);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [categoryId, setCategoryId] = useState<number>(0);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (category) {
-      setName(category.name);
-      setDescription(category.description || '');
-      setCategoryId(category.category_id || 0);
+    if (type) {
+      setName(type.name);
+      setDescription(type.description || '');
     }
-  }, [category]);
+  }, [type]);
 
-  useEffect(() => {
-    if (open) fetchCategories();
-  }, [open]);
+  
 
-  const fetchCategories = async () => {
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/category`);
-      const data = await res.json();
-      setCategories(data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!name.trim()) {
-      setError('Дэд ангиллын нэрийг оруулна уу');
+      setError('нэр оруулна уу');
       return;
     }
-    if (!categoryId) {
-      setError('Үндсэн ангиллыг сонгоно уу');
-      return;
-    }
-    if (!category) return;
 
     try {
       setLoading(true);
-      await onSubmit(category.category_id, { name, description, category_id: categoryId });
+      await onSubmit( type!.id, name, description );
       setError('');
       onClose();
     } catch (err) {
@@ -82,7 +62,7 @@ const EditSubCategoryModal: React.FC<EditSubCategoryModalProps> = ({
     }
   };
 
-  if (!open || !category) return null;
+  if (!open ) return null;
 
   return (
     <div
@@ -96,7 +76,7 @@ const EditSubCategoryModal: React.FC<EditSubCategoryModalProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-gray-800">Дэд ангилал засах</h2>
+          <h2 className="text-xl font-semibold text-gray-800">Төрөл засах</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-700 font-bold text-2xl"
@@ -108,26 +88,9 @@ const EditSubCategoryModal: React.FC<EditSubCategoryModalProps> = ({
         {error && <p className="text-red-500 mb-2">{error}</p>}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block mb-1 text-sm font-medium text-gray-600">
-              Үндсэн ангилал
-            </label>
-            <select
-              value={categoryId || ''}
-              onChange={(e) => setCategoryId(Number(e.target.value))}
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#1d3b86] outline-none"
-            >
-              <option value="">Ангилал</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
-          </div>
 
           <label className="block mb-1 text-sm font-medium text-gray-600">
-            Дэд ангиллын нэр
+            Төрөл нэр
           </label>
           <Input
             placeholder="Дэд ангиллын нэр"
@@ -161,4 +124,4 @@ const EditSubCategoryModal: React.FC<EditSubCategoryModalProps> = ({
   );
 };
 
-export default EditSubCategoryModal;
+export default EditTypeModal;

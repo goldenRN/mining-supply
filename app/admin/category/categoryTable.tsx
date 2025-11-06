@@ -66,13 +66,13 @@ const CategoryTable = ({ categories, onDelete, onEdit }: CategoryTableProps) => 
                 <TableCell>
                   {cat.category_image && (
                     <img
-                      src={`http://localhost:4000${cat.category_image}`}
+                      src={cat.category_image}
                       alt={cat.category_name}
                       width={50}
                       height={50}
                       className="cursor-pointer rounded-md"
                       onClick={() =>
-                        setSelectedImage(`http://localhost:4000${cat.category_image}`)
+                        setSelectedImage(`${cat.category_image}`)
                       }
                     />
                   )}
@@ -137,7 +137,7 @@ const CategoryTable = ({ categories, onDelete, onEdit }: CategoryTableProps) => 
               {/* Хэрвээ дэд ангилал байхгүй бол */}
               {expanded === cat.category_id && cat.subcategories?.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={4} className="bg-gray-50 text-gray-500 italic text-center">
+                  <TableCell colSpan={5} className="bg-gray-50 text-gray-500 italic text-center">
                     Дэд ангилал алга байна
                   </TableCell>
                 </TableRow>

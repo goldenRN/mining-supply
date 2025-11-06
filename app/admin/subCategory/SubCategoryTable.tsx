@@ -14,6 +14,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Pencil, Trash } from 'lucide-react';
 import { SubCategory } from '@/app/types/subcategory';
+// import { Category } from '@/app/types/category';
 
 interface SubCategoryTableProps {
   subCategories: SubCategory[];

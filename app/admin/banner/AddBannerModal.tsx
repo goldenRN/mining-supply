@@ -4,15 +4,16 @@ import React, { useState, FormEvent, ChangeEvent, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-interface AddStateModalProps {
+interface AddBannerModalProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (data: { name: string,  description:string}) => void;
+  onSubmit: (formData: FormData) => Promise<void>;
 }
 
-const AddStateModal = ({ open, onClose, onSubmit }: AddStateModalProps) => {
-  const [name, setName] = useState('');
+const AddBannerModal = ({ open, onClose, onSubmit }: AddBannerModalProps) => {
+
   const [description, setDescription] = useState('');
+  const [image, setImage] = useState<File | null>(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -25,33 +26,37 @@ const AddStateModal = ({ open, onClose, onSubmit }: AddStateModalProps) => {
     return () => window.removeEventListener('keydown', handleEsc);
   }, [onClose]);
 
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const file = e.target.files[0];
+    if (file.size > 2 * 1024 * 1024) { // 2MB limit
+      setError('Зурагны хэмжээ 2MB-аас хэтрэхгүй байх ёстой');
+      return;
+    }
+    setError('');
+    setImage(file);
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!name.trim()) {
-      setError('Дэд ангиллын нэрийг заавал оруулна уу');
-      return;
-    }
+    const formData = new FormData();
+    if (description) formData.append('description', description);
+    if (image) formData.append('image', image);
 
     try {
       setLoading(true);
-      await onSubmit({
-        name, description
-      });
-
-      // Reset form
-      setName('');
+      await onSubmit(formData);
       setDescription('');
+      setImage(null);
       setError('');
       onClose();
     } catch (err) {
-      console.error(err);
       setError('Нэмэх үед алдаа гарлаа');
     } finally {
       setLoading(false);
     }
   };
-
 
   if (!open) return null;
 
@@ -69,7 +74,7 @@ const AddStateModal = ({ open, onClose, onSubmit }: AddStateModalProps) => {
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-gray-800">Хэмжих нэгж нэмэх</h2>
+          <h2 className="text-xl font-semibold text-gray-800">Баннер нэмэх</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-700 font-bold text-2xl"
@@ -83,25 +88,42 @@ const AddStateModal = ({ open, onClose, onSubmit }: AddStateModalProps) => {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            placeholder="Нэр"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-          <label className="block mb-1 text-sm font-medium text-gray-600">
-            Тайлбар
-          </label>
+        
           <Input
             placeholder="Тайлбар"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
 
+          <div>
+            <label className="block mb-1 text-sm font-medium text-gray-600">
+              Зураг сонгох
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4
+                         file:rounded-lg file:border-0
+                         file:text-sm file:font-semibold
+                         file:bg-[#1d3b86] file:text-white
+                         hover:opacity-90 cursor-pointer"
+            />
+          </div>
+
+          {/* Preview */}
+          {image && (
+            <img
+              src={URL.createObjectURL(image)}
+              alt="preview"
+              className="mt-2 w-32 h-32 object-cover rounded"
+            />
+          )}
+
           <Button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-700 text-white font-bold py-2 px-4 rounded-lg hover:opacity-90 transition flex justify-center items-center"
+            className="w-full bg-gradient-to-r from-[#d49943] via-[#dfa243] to-[#edad45] text-white font-bold py-2 px-4 rounded-lg hover:opacity-90 transition flex justify-center items-center"
           >
             {loading && <span className="animate-spin border-2 border-white border-t-transparent rounded-full w-5 h-5 mr-2"></span>}
             {loading ? 'Нэмэх...' : 'Нэмэх'}
@@ -112,4 +134,4 @@ const AddStateModal = ({ open, onClose, onSubmit }: AddStateModalProps) => {
   );
 };
 
-export default AddStateModal;
+export default AddBannerModal;

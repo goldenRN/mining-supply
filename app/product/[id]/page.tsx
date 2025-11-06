@@ -33,7 +33,7 @@ export default function ProductPage({ params }: Props) {
     const fetchProduct = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:4000/api/product/${id}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/product/${id}`);
         if (!res.ok) throw new Error('Product not found');
         const json = await res.json();
         setProduct(json);
@@ -41,7 +41,7 @@ export default function ProductPage({ params }: Props) {
 
         // fetch related by category (simple)
         if (json.category_name) {
-          const rel = await fetch(`http://localhost:4000/api/product?category=${encodeURIComponent(json.category_name)}&limit=8`);
+          const rel = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/product?category=${encodeURIComponent(json.category_name)}&limit=8`);
           if (rel.ok) {
             const relJson = await rel.json();
             setRelated(relJson.filter((p: Product) => p.id !== json.id));
@@ -81,9 +81,7 @@ export default function ProductPage({ params }: Props) {
   if (!product) return <div className="py-20 text-center text-gray-500">Бараа олдсонгүй</div>;
 
   const baseImgUrl = (path: string) => {
-    // if stored relative paths: return `http://localhost:4000/uploads/${path}`
-    // or if full URL already, return path
-    return path.startsWith('http') ? path : `http://localhost:4000${path.startsWith('/') ? '' : '/'}${path}`;
+    return path.startsWith('http') ? path : `${process.env.NEXT_PUBLIC_API_URL}${path.startsWith('/') ? '' : '/'}${path}`;
   };
 
   return (

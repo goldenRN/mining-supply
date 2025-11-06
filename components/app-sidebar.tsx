@@ -11,13 +11,7 @@ import { VersionSwitcher } from "@/components/version-switcher"
 import {
   Sidebar,
   SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarRail,
   SidebarFooter,
 } from "@/components/ui/sidebar"
@@ -36,7 +30,7 @@ import {
   LayoutDashboard,
   Newspaper,
   List,
-  Subtitles,
+  ImageIcon,
   ListPlus,
   Wallet,
   Hotel,
@@ -73,6 +67,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <Newspaper className='mr-2 h-8 w-4' />
                 <Link href='/admin/product'>Барааны мэдээлэл</Link>
               </CommandItem>
+              <CommandItem className={isActive('/admin/banner') ? 'bg-muted text-blue-600' : ''}>
+                <ImageIcon className='mr-2 h-8 w-4' />
+                <Link href='/admin/banner'>Баннер</Link>
+              </CommandItem>
             </CommandGroup>
 
             <CommandSeparator />
@@ -90,10 +88,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <ClipboardPen className='mr-2 h-8 w-4' />
                 <Link href='/admin/state'>Төлөв </Link>
               </CommandItem>
-              {/* <CommandItem className={isActive('/admin/class') ? 'bg-muted text-blue-600' : ''}>
+              <CommandItem className={isActive('/admin/type') ? 'bg-muted text-blue-600' : ''}>
                 <ClipboardPen className='mr-2 h-8 w-4' />
-                <Link href='/admin/class'>Бүлэг </Link>
-              </CommandItem> */}
+                <Link href='/admin/type'>Төрөл </Link>
+              </CommandItem>
               <CommandItem className={isActive('/admin/brand') ? 'bg-muted text-blue-600' : ''}>
                 <ClipboardPen className='mr-2 h-8 w-4' />
                 <Link href='/admin/brand'>Брэнд </Link>

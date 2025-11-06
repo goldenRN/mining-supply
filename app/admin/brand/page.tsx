@@ -24,13 +24,13 @@ const BrandPage = () => {
   }, []);
 
   const fetchBrands = async () => {
-    const res = await fetch('http://localhost:4000/api/brand');
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/brand`);
     const data = await res.json();
     setBrands(data);
   };
 
   const handleAddBrand = async (data: { name: string; description: string }) => {
-    await fetch('http://localhost:4000/api/brand', {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/brand`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -45,7 +45,7 @@ const BrandPage = () => {
   };
 
   const handleUpdateBrand = async (id: number, name: string, description: string) => {
-    await fetch(`http://localhost:4000/api/brand/${id}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/brand/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, description }),
@@ -58,7 +58,7 @@ const BrandPage = () => {
     if (!confirm('Устгах уу?')) return;
     try {
       const user = JSON.parse(localStorage.getItem('user') || '{}');
-      const res = await fetch(`http://localhost:4000/api/brand/${id}`, { method: 'DELETE' });
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/brand/${id}`, { method: 'DELETE' });
       if (!res.ok) {
         const error = await res.json();
         return alert(error.message || 'Устгах үед алдаа гарлаа');
@@ -75,7 +75,7 @@ const BrandPage = () => {
       <div className="flex justify-between items-center bg-white sticky top-0 z-10 p-2 mb-4">
         <BackButton text="Буцах" link="/admin/dashboard" />
         <button
-          className="bg-[#2563eb] hover:opacity-90 text-white font-bold py-2 px-4 rounded text-xs flex items-center gap-2"
+          className="bg-yellow-600 hover:opacity-90 text-white font-bold py-2 px-4 rounded text-xs flex items-center gap-2"
           onClick={() => setOpenAdd(true)}
         >
           <Plus size={15} /> Брэнд нэмэх

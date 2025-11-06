@@ -2,42 +2,42 @@
 
 import React, { useState, useEffect } from 'react';
 import { Plus } from 'lucide-react';
-import CategoryTable from './stateTable';
+import CategoryTable from './typeTable';
 import BackButton from '@/components/BackButton';
-import EditStateModal from './EditStateModal';
-import AddStateModal from './AddStateModal';
+import EditTypeModal from './EditTypeModal';
+import AddTypeModal from './AddTypeModal';
 
-interface State {
+interface Type {
   id: number;
   name: string;
   description: string;
 }
 
-const StatePage: React.FC = () => {
-  const [states, setStates] = useState<State[]>([]);
+const TypePage: React.FC = () => {
+  const [type, setType] = useState<Type[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [editState, setEditState] = useState<State | null>(null);
+  const [editType, setEditType] = useState<Type | null>(null);
   useEffect(() => {
-    fetchStates();
+    fetchTypes();
   }, []);
 
-  const fetchStates = async () => {
+  const fetchTypes = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/status`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/type`, {
       });
       const data = await res.json();
-      setStates(data);
+      setType(data);
     } catch (err) {
       console.error(err);
     }
   };
 
-  const handleAddState = async (data: { name: string }) => {
+  const handleAddType = async (data: { name: string }) => {
     try {
       const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/status`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/type`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,23 +46,23 @@ const StatePage: React.FC = () => {
         body: JSON.stringify(data), // 👈 Modal-аас ирсэн JSON
       });
 
-      if (!res.ok) throw new Error('Төлөв нэмэхэд алдаа гарлаа');
+      if (!res.ok) throw new Error('Төрөл нэмэхэд алдаа гарлаа');
       setOpenModal(false);
-      await fetchStates(); // жагсаалтаа дахин татах
+      await fetchTypes(); // жагсаалтаа дахин татах
     } catch (error) {
       console.error(error);
     }
   };
-  const handleEditClick = (cat: State) => {
-    setEditState(cat);
+  const handleEditClick = (cat: Type) => {
+    setEditType(cat);
     setEditModalOpen(true);
   };
   // Edit-ийг backend руу хадгалах
-  const handleUpdateState = async (id: number, name: string, description?: string) => {
+  const handleUpdateType = async (id: number, name: string, description?: string) => {
     try {
       const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/status/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/type/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -76,9 +76,9 @@ const StatePage: React.FC = () => {
       });
 
       const updated = await res.json();
-      if (!res.ok) throw new Error(updated.message || 'Төлөв засахад алдаа гарлаа');
+      if (!res.ok) throw new Error(updated.message || 'Төрөл засахад алдаа гарлаа');
 
-      setStates(prev => prev.map(c => (c.id === id ? updated : c)));
+      setType(prev => prev.map(c => (c.id === id ? updated : c)));
       setEditModalOpen(false);
     } catch (err) {
       console.error(err);
@@ -99,7 +99,7 @@ const StatePage: React.FC = () => {
       </div>
 
       <CategoryTable
-        states={states}
+        states={type}
         onEdit={handleEditClick}
         // onDelete={handleDeleteCategory} 
         onDelete={async (id) => {
@@ -107,7 +107,7 @@ const StatePage: React.FC = () => {
           if (!confirmed) return;
           try {
             const user = JSON.parse(localStorage.getItem('user') || '{}');
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/status/${id}`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/type/${id}`, {
               method: 'DELETE',
               headers: { Authorization: `Bearer ${user.token}` },
             });
@@ -115,26 +115,26 @@ const StatePage: React.FC = () => {
               const error = await res.json();
               return alert(error.message || 'Устгах үед алдаа гарлаа');
             }
-            setStates((prev) => prev.filter((cat) => cat.id !== id));
+            setType((prev) => prev.filter((cat) => cat.id !== id));
             alert('Амжилттай устлаа');
           } catch (err) {
             alert('Серверийн алдаа');
           }
         }} />
-      <EditStateModal
+      <EditTypeModal
         open={editModalOpen}
         onClose={() => setEditModalOpen(false)}
-        onSubmit={handleUpdateState}
-        state={editState}
+        onSubmit={handleUpdateType}
+        type={editType}
       />
-      <AddStateModal
+      <AddTypeModal
         open={openModal}
         onClose={() => setOpenModal(false)}
         onSubmit={
-          handleAddState}
+          handleAddType}
       />
     </div>
   );
 };
 
-export default StatePage;
+export default TypePage;

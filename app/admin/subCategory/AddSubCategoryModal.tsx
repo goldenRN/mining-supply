@@ -3,16 +3,10 @@
 import React, { useState, FormEvent, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Category } from '@/app/types/category';
 
 
 
-interface Category {
-  id: number,
-  name: string,
-  description: string,
-  image_url: string,
-  created_at: string
-}
 interface AddCategoryModalProps {
   open: boolean;
   onClose: () => void;
@@ -115,8 +109,8 @@ const AddSubCategoryModal: React.FC<AddCategoryModalProps> = ({ open, onClose, o
             >
               <option value="">Ангилал</option>
               {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.name}
+                <option key={cat.category_id} value={cat.category_id}>
+                  {cat.category_name}
                 </option>
               ))}
             </select>

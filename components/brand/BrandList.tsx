@@ -26,7 +26,7 @@ export default function BrandList() {
     const fetchBrands = async () => {
         try {
             setLoading(true);
-            const res = await fetch('http://localhost:4000/api/brand');
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/brand`);
             const data = await res.json();
             setBrands(data || []);
         } catch (err) {
@@ -94,7 +94,7 @@ export default function BrandList() {
                     </div>
 
                     {/* Pagination */}
-                    <div className="mt-6 flex items-center justify-center gap-3">
+                    {/* <div className="mt-6 flex items-center justify-center gap-3">
                         <button
                             onClick={() => setPage((p) => Math.max(1, p - 1))}
                             disabled={page === 1}
@@ -114,7 +114,7 @@ export default function BrandList() {
                         >
                             Дараах
                         </button>
-                    </div>
+                    </div> */}
 
                     {filtered.length === 0 && (
                         <div className="text-center py-8 text-gray-500">Брэнд олдсонгүй</div>

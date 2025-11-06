@@ -9,7 +9,7 @@ const BubbleCategory = () => {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get("https://urnukh.vercel.app/api/category");
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/category`);
       setCategories(res.data);
     } catch (err) {
       console.error("Category татахад алдаа:", err);
@@ -32,7 +32,7 @@ const BubbleCategory = () => {
             {/* Icon circle */}
             <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center transition group-hover:bg-gray-200">
               <Image
-                src={`http://localhost:4000${cat.category_image}`}
+                src={cat.category_image}
                 alt={cat.category_name}
                 width={48}
                 height={48}

@@ -3,36 +3,32 @@
 import React, { useState, FormEvent, ChangeEvent, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Category } from "./categoryTable";
 
-// interface EditCategoryModalProps {
-//     open: boolean;
-//     onClose: () => void;
-//     onSubmit: (id: number, formData: FormData) => Promise<void>;
-//     category: Category | null;
-// }
-interface EditCategoryModalProps {
+export interface Banner {
+    banner_id: number;
+    description: string;
+    image_url: string;
+}
+interface EditBannerModalProps {
     open: boolean; // modal нээгдсэн эсэх
     onClose: () => void; // modal хаах функц
     onSubmit: (id: number, formData: FormData) => Promise<void>; // хадгалах үед дуудагдах функц
-    category: Category | null; // засаж буй category-ийн өгөгдөл
+    banner: Banner | null; // засаж буй benner-ийн өгөгдөл
 }
 
 
-const EditCategoryModal = ({ open, onClose, onSubmit, category }: EditCategoryModalProps) => {
-    const [name, setName] = useState('');
+const EditBannerModal = ({ open, onClose, onSubmit, banner }: EditBannerModalProps) => {
+
     const [description, setDescription] = useState('');
     const [image, setImage] = useState<File | null>(null);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    // category солигдсон үед state шинэчлэх
     useEffect(() => {
-        if (category) {
-            setName(category.category_name);
-            setDescription(category.description || '');
+        if (banner) {
+            setDescription(banner.description || '');
             setImage(null);
         }
-    }, [category]);
+    }, [banner]);
 
     // ESC товч дарсан үед хаах
     useEffect(() => {
@@ -43,24 +39,18 @@ const EditCategoryModal = ({ open, onClose, onSubmit, category }: EditCategoryMo
         return () => document.removeEventListener('keydown', handleEsc);
     }, [onClose]);
 
-    if (!open || !category) return null;
+    if (!open || !banner) return null;
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!name.trim()) {
-            setError('Ангиллын нэрийг заавал оруулна уу');
-            return;
-        }
         const formData = new FormData();
-        formData.append('name', name);
         formData.append('description', description);
         if (image) formData.append('image', image);
 
 
         try {
             setLoading(true);
-            await onSubmit(category.category_id, formData);
-            setName('');
+            await onSubmit(banner.banner_id, formData);
             setDescription('');
             setImage(null);
             setError('');
@@ -82,7 +72,7 @@ const EditCategoryModal = ({ open, onClose, onSubmit, category }: EditCategoryMo
                 onClick={(e) => e.stopPropagation()} // доторх div дээр дарвал overlay хаахгүй
             >
                 <div className='flex justify-between items-center mb-4'>
-                    <h2 className="text-xl font-bold">Ангилал Засах</h2>
+                    <h2 className="text-xl font-bold">Баннер Засах</h2>
                     <button
                         onClick={onClose}
                         className="text-gray-400 hover:text-gray-700 font-bold text-xl"
@@ -92,12 +82,6 @@ const EditCategoryModal = ({ open, onClose, onSubmit, category }: EditCategoryMo
                 </div>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                    <Input
-                        placeholder="Ангиллын нэр"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                    />
 
                     <Input
                         placeholder="Тайлбар"
@@ -123,9 +107,9 @@ const EditCategoryModal = ({ open, onClose, onSubmit, category }: EditCategoryMo
                         />
                     </div>
 
-                    {(image || category.category_image) && (
+                    {(image || banner.image_url) && (
                         <img
-                            src={image ? URL.createObjectURL(image) : `${process.env.NEXT_PUBLIC_API_URL}${category.category_image}`}
+                            src={image ? URL.createObjectURL(image) : `${process.env.NEXT_PUBLIC_API_URL}${banner.image_url}`}
                             alt="preview"
                             className="mt-2 w-32 h-32 object-cover rounded"
                         />
@@ -148,4 +132,4 @@ const EditCategoryModal = ({ open, onClose, onSubmit, category }: EditCategoryMo
     );
 };
 
-export default EditCategoryModal;
+export default EditBannerModal;

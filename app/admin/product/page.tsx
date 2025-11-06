@@ -17,6 +17,7 @@ interface Product {
   brand_name: string;
   unit_name: string;
   status_name: string;
+  type_name: string;
   price: number;
   stock: number;
   created_at: string;
@@ -36,7 +37,7 @@ const ProductPage = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:4000/api/product");
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/product`);
       setProducts(res.data);
     } catch (err) {
       console.error("Бараа татахад алдаа:", err);
@@ -70,7 +71,7 @@ const ProductPage = () => {
   }, [products, search, sortField, sortOrder]);
   const handleViewImages = async (productId: number) => {
     try {
-      const res = await axios.get(`http://localhost:4000/api/productimg/${productId}`);
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/productimg/${productId}`);
       setImages(res.data.map((img: any) => img.image_url));
       setImageModalOpen(true);
     } catch (err) {
@@ -90,7 +91,7 @@ const ProductPage = () => {
   const handleDelete = async (id: number) => {
     if (!confirm("⚠️ Энэ барааг устгах уу?")) return;
     try {
-      await axios.delete(`http://localhost:4000/api/product/${id}`);
+      await axios.delete(`/api/product/${id}`);
       await fetchProducts();
     } catch (err) {
       console.error("Устгах үед алдаа:", err);
@@ -110,10 +111,10 @@ const ProductPage = () => {
               onChange={(e) => setSearch(e.target.value)}
               className="max-w-sm"
             />
-            <Button onClick={fetchProducts} variant="outline" disabled={loading}>
-              <RefreshCcw size={16} className={loading ? "animate-spin" : ""} />
+            <Button onClick={fetchProducts} variant="outline" disabled={loading} className="bg-blue-900">
+              <RefreshCcw size={16} className={loading ? "animate-spin text-white" : "text-white"} />
             </Button>
-            <Button onClick={() => { setEditData(null); setOpen(true); }} className="flex gap-2 items-center">
+            <Button onClick={() => { setEditData(null); setOpen(true); }} className="flex gap-2 items-center bg-yellow-600">
               <PlusCircle size={18} /> Шинэ бараа
             </Button>
           </div>
@@ -131,6 +132,7 @@ const ProductPage = () => {
                   { key: "brand_name", label: "Брэнд" },
                   { key: "unit_name", label: "Нэгж" },
                   { key: "status_name", label: "Төлөв" },
+                  { key: "type_name", label: "Төрөл" },
                   { key: "price", label: "Үнэ (₮)" },
                   { key: "stock", label: "Үлдэгдэл" },
                   { key: "created_at", label: "Огноо" },
@@ -138,14 +140,14 @@ const ProductPage = () => {
                   <th
                     key={col.key}
                     onClick={() => handleSort(col.key as keyof Product)}
-                    className="py-3 px-4 cursor-pointer hover:bg-gray-200 whitespace-nowrap text-sm"
+                    className="py-3 px-4 cursor-pointer hover:bg-gray-200 whitespace-nowrap text-xs"
                   >
                     {col.label}{" "}
                     {sortField === col.key &&
                       (sortOrder === "asc" ? "▲" : "▼")}
                   </th>
                 ))}
-                <th className="py-3 px-4 text-center text-sm">Үйлдэл</th>
+                <th className="py-3 px-4 text-center text-xs">Үйлдэл</th>
               </tr>
             </thead>
             <tbody>
@@ -153,15 +155,16 @@ const ProductPage = () => {
                 filteredProducts.map((p) => (
                   <tr key={p.id} className="border-b hover:bg-gray-50">
 
-                    <td className="py-2 px-4 text-sm">{p.name}</td>
-                    <td className="py-2 px-4 text-sm">{p.category_name}</td>
-                    <td className="py-2 px-4 text-sm">{p.subcategory_name}</td>
-                    <td className="py-2 px-4 text-sm">{p.brand_name}</td>
-                    <td className="py-2 px-4 text-sm">{p.unit_name}</td>
-                    <td className="py-2 px-4 text-sm">{p.status_name}</td>
-                    <td className="py-2 px-4 text-sm">{p.price.toLocaleString()}₮</td>
-                    <td className="py-2 px-4 text-sm">{p.stock}</td>
-                    <td className="py-2 px-4 text-sm">
+                    <td className="py-2 px-4 text-xs">{p.name}</td>
+                    <td className="py-2 px-4 text-xs">{p.category_name}</td>
+                    <td className="py-2 px-4 text-xs">{p.subcategory_name}</td>
+                    <td className="py-2 px-4 text-xs">{p.brand_name}</td>
+                    <td className="py-2 px-4 text-xs">{p.unit_name}</td>
+                    <td className="py-2 px-4 text-xs">{p.status_name}</td>
+                    <td className="py-2 px-4 text-xs">{p.type_name}</td>
+                    <td className="py-2 px-4 text-xs">{p.price.toLocaleString()}₮</td>
+                    <td className="py-2 px-4 text-xs">{p.stock}</td>
+                    <td className="py-2 px-4 text-xs">
                       {new Date(p.created_at).toLocaleDateString()}
                     </td>
                     <td className="py-2 px-4 text-center">

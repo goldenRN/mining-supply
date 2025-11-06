@@ -19,7 +19,7 @@ export default function ProductImageUpload({ productId }: ProductImageUploadProp
       form.append('images', files[i]);
     }
 
-    const res = await fetch(`/api/products/${productId}/images`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${productId}/images`, {
       method: 'POST',
       body: form,
     });

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   MenuIcon,
-  ShoppingBasketIcon,
+  LucideShoppingBasket,
   PhoneCallIcon,
   SearchIcon,
   XIcon,
@@ -71,7 +71,7 @@ export default function Navbar() {
                 className="bg-transparent flex-1 outline-none text-gray-700 placeholder-gray-500"
               />
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 ml-5">
               <Link
                 href="/basket"
                 className="relative flex items-center gap-2 bg-gradient-to-r from-[#1d3b86] via-[#2b5ba5] to-[#1d3b86]
@@ -79,13 +79,13 @@ export default function Navbar() {
                text-white px-5 py-2.5 rounded-full font-medium shadow-md transition-all duration-300 group"
               >
                 <div className="relative">
-                  <ShoppingBasketIcon
+                  <LucideShoppingBasket
                     size={20}
                     className="transition-transform duration-300 group-hover:scale-110"
                   />
                   {cart.length > 0 && (
                     <span
-                      className="absolute -top-2 -right-2 bg-gradient-to-r from-red-500 to-red-600 
+                      className="absolute -top-2 -right-2 bg-yellow-600 
                      text-white text-[11px] font-semibold px-1.5 py-[1px] rounded-full shadow"
                     >
                       {cart.length}
@@ -93,14 +93,6 @@ export default function Navbar() {
                   )}
                 </div>
 
-                <span className="hidden sm:inline-block group-hover:translate-x-0.5 transition-transform">
-                  Сагс
-                </span>
-
-                {/* Animated glow on hover */}
-                <span
-                  className="absolute inset-0 rounded-full bg-white/10 opacity-0 group-hover:opacity-100 blur-md transition"
-                ></span>
               </Link>
             </div>
 
@@ -111,9 +103,7 @@ export default function Navbar() {
                hover:bg-blue-700 text-white px-4 py-2 rounded-2xl font-light shadow-md transition"
               >
                 <ShoppingBasketIcon size={18} />
-                <span className="ml-1 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                  {cart.length}
-                </span>
+               
               </Link>
             </div> */}
           </div>

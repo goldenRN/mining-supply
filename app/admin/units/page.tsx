@@ -24,13 +24,13 @@ const UnitPage = () => {
   }, [])
 
   const fetchUnits = async () => {
-    const res = await fetch('http://localhost:4000/api/unit')
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/unit`)
     const data = await res.json()
     setUnits(data)
   }
 
   const handleAddUnit = async (data: { name: string; description: string }) => {
-    await fetch('http://localhost:4000/api/unit', {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/unit`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -45,7 +45,7 @@ const UnitPage = () => {
   }
 
   const handleUpdateUnit = async (id: number, name: string, description: string) => {
-    await fetch(`http://localhost:4000/api/unit/${id}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/unit/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, description }),
@@ -56,7 +56,7 @@ const UnitPage = () => {
 
   const handleDelete = async (id: number) => {
     if (!confirm('Устгах уу?')) return
-    await fetch(`http://localhost:4000/api/unit/${id}`, { method: 'DELETE' })
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/unit/${id}`, { method: 'DELETE' })
     fetchUnits()
   }
 
@@ -65,7 +65,7 @@ const UnitPage = () => {
       <div className="flex justify-between items-center bg-white sticky top-0 z-10 p-2 mb-4">
         <BackButton text="Буцах" link="/admin/dashboard" />
         <button
-          className="bg-[#4c9a2a] hover:opacity-90 text-white font-bold py-2 px-4 rounded text-xs flex items-center gap-2"
+          className="bg-yellow-600 hover:opacity-90 text-white font-bold py-2 px-4 rounded text-xs flex items-center gap-2"
           onClick={() => setOpenAdd(true)}
         >
           <Plus size={15} /> Нэмэх
