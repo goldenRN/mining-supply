@@ -35,8 +35,8 @@ const BannerPage: React.FC = () => {
       const data = await res.json();
 
       const formatted: Banner[] = data.map((c: any) => ({
-        banner_id: c.banner_id,
-        banner_image: c.banner_image,
+        id: c.id,
+        image_url: c.image_url,
         description: c.description,
       }));
 
@@ -59,7 +59,7 @@ const BannerPage: React.FC = () => {
         body: formData,
       });
 
-      if (!res.ok) throw new Error('Ангилал нэмэхэд алдаа гарлаа');
+      if (!res.ok) throw new Error(' нэмэх үед алдаа гарлаа');
       setOpenModal(false);
       await fetchBanners();
     } catch (err: any) {
@@ -112,7 +112,7 @@ const BannerPage: React.FC = () => {
         throw new Error(errData.message || 'Устгах үед алдаа гарлаа');
       }
 
-      setBanner((prev) => prev.filter((b) => b.banner_id !== id));
+      setBanner((prev) => prev.filter((b) => b.id !== id));
       alert('Амжилттай устгалаа');
     } catch (err: any) {
       alert(err.message);

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 export interface Banner {
-    banner_id: number;
+    id: number;
     description: string;
     image_url: string;
 }
@@ -50,7 +50,7 @@ const EditBannerModal = ({ open, onClose, onSubmit, banner }: EditBannerModalPro
 
         try {
             setLoading(true);
-            await onSubmit(banner.banner_id, formData);
+            await onSubmit(banner.id, formData);
             setDescription('');
             setImage(null);
             setError('');
@@ -109,9 +109,9 @@ const EditBannerModal = ({ open, onClose, onSubmit, banner }: EditBannerModalPro
 
                     {(image || banner.image_url) && (
                         <img
-                            src={image ? URL.createObjectURL(image) : `${process.env.NEXT_PUBLIC_API_URL}${banner.image_url}`}
+                            src={image ? URL.createObjectURL(image) : `${banner.image_url}`}
                             alt="preview"
-                            className="mt-2 w-32 h-32 object-cover rounded"
+                            className="mt-2 w-full h-32 object-cover rounded"
                         />
                     )}
 

@@ -116,7 +116,9 @@ const AddBannerModal = ({ open, onClose, onSubmit }: AddBannerModalProps) => {
             <img
               src={URL.createObjectURL(image)}
               alt="preview"
-              className="mt-2 w-32 h-32 object-cover rounded"
+              width={100}
+              height={80}
+              className="mt-2 w-full h-32 object-cover rounded"
             />
           )}
 

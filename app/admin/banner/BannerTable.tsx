@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import {
@@ -42,18 +40,16 @@ const BannerTable = ({ banner, onDelete, onEdit }: BannerTableProps) => {
           {banner.map((b) => (
             <>
               {/* ✅ Category Row */}
-              <TableRow key={b.banner_id}>
+              <TableRow key={b.id}>
                 <TableCell>{b.description || '-'}</TableCell>
                 <TableCell>
                   {b.image_url && (
                     <img
                       src={b.image_url}
-                      width={100}
-                      height={50}
-                      className="cursor-pointer rounded-md"
-                      onClick={() =>
-                        setSelectedImage(`${b.image_url}`)
-                      }
+                      width={150}
+                      height={100}
+                      className="cursor-pointer rounded-md object-cover border border-gray-200 shadow-sm"
+                      alt={b.description}
                     />
                   )}
                 </TableCell>
@@ -73,13 +69,13 @@ const BannerTable = ({ banner, onDelete, onEdit }: BannerTableProps) => {
                     {/* 🗑️ Delete Button */}
                     <button
                       className="bg-red-200 hover:bg-red-500 text-black py-1 px-3 rounded text-xs"
-                      onClick={() => onDelete && onDelete(b.banner_id)}
+                      onClick={() => onDelete && onDelete(b.id)}
                     >
                       <Trash size={16} />
                     </button>
                   </div>
                 </TableCell>
-                
+
               </TableRow>
             </>
           ))}
