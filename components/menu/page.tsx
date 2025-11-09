@@ -27,10 +27,10 @@ const CategoryPage = () => {
             {/* 🟢 Category мөр */}
             <div className="flex items-center gap-3">
               <Image
-                src={`${process.env.NEXT_PUBLIC_API_URL}${cat.category_image}`}
+                src={cat.category_image}
                 alt={cat.category_name}
-                width={44}
-                height={44}
+                width={35}
+                height={35}
                 className="rounded-md object-cover"
               />
               <span className="text-gray-900 text-base">

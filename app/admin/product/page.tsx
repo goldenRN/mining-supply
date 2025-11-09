@@ -91,7 +91,7 @@ const ProductPage = () => {
   const handleDelete = async (id: number) => {
     if (!confirm("⚠️ Энэ барааг устгах уу?")) return;
     try {
-      await axios.delete(`/api/product/${id}`);
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/product/${id}`);
       await fetchProducts();
     } catch (err) {
       console.error("Устгах үед алдаа:", err);
