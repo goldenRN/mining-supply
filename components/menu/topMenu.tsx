@@ -20,7 +20,7 @@ export default function CategoryMenu({ onCategorySelect }: { onCategorySelect: (
 
     return (
         <div className="flex justify-center gap-8 text-black py-3 sticky top-0 bg-white z-20">
-            
+
             {categories.map((cat) => (
                 <button
                     key={cat.id}
@@ -35,6 +35,7 @@ export default function CategoryMenu({ onCategorySelect }: { onCategorySelect: (
                             : "w-0 group-hover:w-full bg-black hover:bg-black/50"
                             }`}
                     ></span>
+
                 </button>
             ))}
         </div>

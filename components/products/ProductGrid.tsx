@@ -7,7 +7,8 @@ import { LucideShoppingBasket } from 'lucide-react'
 import Link from 'next/link'
 import { useCart } from '@/app/context/CartContext';
 import axios from 'axios';
-
+import Image from "next/image";
+import no_image from '/img/default_logo.png';
 interface Product {
   id: number
   name: string
@@ -58,19 +59,25 @@ export default function ProductGrid({ type, title }: Props) {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
         {products?.map((product) => {
-          const imageUrl =
+          // const imageUrl =
+          //   product.images && product.images.length > 0
+          //     ? product.images[0].image_url
+          //     : no_image
+          const imageUrl: string =
             product.images && product.images.length > 0
               ? product.images[0].image_url
-              : '/no-image.png'
+              : no_image.src;
 
           return (
             <Link key={product.id} href={`/product/${product.id}`}>
               <div className="rounded-xl border border-gray-200 shadow hover:shadow-xl hover:scale-[1.02] transition duration-300 flex flex-col bg-white">
                 <div className="w-full p-1">
                   <div className="relative w-full aspect-square overflow-hidden rounded-lg bg-slate-100">
-                    <img
+                    <Image
                       src={imageUrl}
                       alt={product.name}
+                      width={50}
+                      height={50}
                       className="object-cover w-full h-full hover:scale-105 transition-transform duration-500"
                     />
                   </div>

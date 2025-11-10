@@ -10,9 +10,9 @@ import {
   XIcon,
 } from "lucide-react";
 import { useState } from "react";
-import logo_v from "/img/logo_v.png";
+import logo_v from "/img/ms_logo_white.png";
 import CategoryPage from "./menu/page";
-import CategoryMenu from "./common/topMenu";
+import CategoryMenu from "./menu/topMenu";
 import { useCart } from '@/app/context/CartContext';
 
 export default function Navbar() {
@@ -28,15 +28,17 @@ export default function Navbar() {
   return (
     <header className="w-full shadow-lg border-b border-gray-200 sticky top-0 z-50">
       {/* --- Top bar --- */}
-      <div className="h-12 bg-gradient-to-b from-[#1d3b86] via-[#3f6cb8] to-[#1d3b86]
-       text-white flex items-center justify-between px-6 py-2 text-sm">
-        <div
-          className="flex items-center space-x-3 cursor-pointer"
-          onClick={() => setOpenMenu(!openMenu)}
-        >
-          <MenuIcon size={25} className="text-white hover:text-cyan-200 transition" />
-          <span className="text-md font-light tracking-wide">Ангилал</span>
-        </div>
+      <div className="h-12 bg-blue-900
+       text-white flex items-center justify-between px-6 py-2 text-sm"> 
+
+      {/* <div className="h-12 bg-gradient-to-b from-[#1d3b86] via-[#3f6cb8] to-[#1d3b86]
+       text-white flex items-center justify-between px-6 py-2 text-sm"> */}
+
+        <Link href="/">
+          <div>
+            <Image src={logo_v} alt="Logo" width={130} height={80} className="object-contain" />
+          </div>
+        </Link>
 
         <div className="flex items-center gap-2 px-3 py-1.5">
           <PhoneCallIcon size={15} />
@@ -50,11 +52,13 @@ export default function Navbar() {
           {/* ☰ Menu and CategoryMenu */}
 
           <div className="flex items-center gap-3">
-            <Link href="/">
-              <div>
-                <Image src={logo_v} alt="Logo" width={130} height={80} className="object-contain" />
-              </div>
-            </Link>
+            <div
+              className="flex items-center space-x-3 cursor-pointer"
+              onClick={() => setOpenMenu(!openMenu)}
+            >
+              <MenuIcon size={30} className="text-blue-950 hover:text-blue-500 transition" />
+              <span className="text-md tracking-wide text-blue-950">Ангилал</span>
+            </div>
             <div className="px-10">
               {/* 🔹 CategoryMenu-д сонгох event дамжуулна */}
               <CategoryMenu onCategorySelect={handleCategorySelect} />

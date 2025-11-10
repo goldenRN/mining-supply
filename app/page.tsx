@@ -5,7 +5,7 @@ import BrandList from "@/components/brand/BrandList";
 import BannerPromotion from "@/components/common/BannerPromotion";
 import ProductGrid from "@/components/products/ProductGrid";
 import Slider from "@/components/common/Slider";
-import BubbleCategory from "@/components/common/bubbleCategory";
+import BubbleCategory from "@/components/menu/bubbleCategory";
 
 export default function Home() {
   const allRef = useRef<HTMLDivElement>(null);
@@ -36,7 +36,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <div ref={allRef} className="mb-5">
+      <div className="mb-5">
         <Slider />
       </div>
 
@@ -44,7 +44,7 @@ export default function Home() {
         <BubbleCategory />
       </div>
 
-      <section  className="max-w-7xl mx-auto px-6 mb-14 scroll-mt-24">
+      <section  ref={allRef} className="max-w-7xl mx-auto mb-14 scroll-mt-24">
         <ProductGrid type="all" title="Бүх бараа" />
       </section>
 

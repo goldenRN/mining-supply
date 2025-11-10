@@ -3,9 +3,13 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import defaultImage from "/img/default_logo.png";
 
 const BubbleCategory = () => {
   const [categories, setCategories] = useState<any[]>([]);
+  const [width, setWidth] = useState(0);
+
 
   const fetchCategories = async () => {
     try {
@@ -20,57 +24,57 @@ const BubbleCategory = () => {
     fetchCategories();
   }, []);
 
+  // Хөдөлгөөн хийх боломжийн өргөнийг тооцоолно
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const handleResize = () => {
+      const carousel = document.getElementById("cat-carousel");
+      if (carousel)
+        setWidth(carousel.scrollWidth - carousel.offsetWidth);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [categories]);
+
   return (
-    <div className="max-w-7xl mx-auto px-6 py-8">
-  {/* Mobile: scroll */}
-  <div className="flex sm:hidden overflow-x-auto gap-6 px-2">
-    {categories.map((cat) => (
-      <Link
-        key={cat.category_id}
-        href={`/category/${cat.category_id}`}
-        className="flex flex-col items-center group cursor-pointer w-24 flex-shrink-0"
+    <div className="relative max-w-7xl mx-auto py-6 overflow-hidden">
+      {/* Carousel */}
+      <motion.div
+        id="cat-carousel"
+        className="flex gap-8 cursor-grab active:cursor-grabbing px-4"
+        drag="x"
+        dragConstraints={{ right: 0, left: -width }}
       >
-        <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center transition group-hover:bg-gray-200 shadow-sm">
-          <Image
-            src={cat.category_image}
-            alt={cat.category_name}
-            width={48}
-            height={48}
-            className="object-contain"
-          />
-        </div>
-        <p className="mt-3 text-sm text-gray-700 text-center font-medium group-hover:text-gray-900">
-          {cat.category_name}
-        </p>
-      </Link>
-    ))}
-  </div>
+        {categories.map((cat) => {
+          const imageSrc = cat.category_image || defaultImage;
+          return (
+            <Link
+              key={cat.category_id}
+              href={`/category/${cat.category_id}`}
+              className="flex flex-col items-center flex-shrink-0 w-24 group"
+            >
+              <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center transition-all duration-300 group-hover:bg-gray-200 shadow-md overflow-hidden">
+                <Image
+                  src={imageSrc}
+                  alt={cat.category_name || "Ангилал"}
+                  width={60}
+                  height={60}
+                  className="object-contain"
+                />
+              </div>
+              <p className="mt-3 text-sm text-gray-700 text-center font-medium group-hover:text-gray-900">
+                {cat.category_name || "Нэргүй"}
+              </p>
+            </Link>
+          );
+        })}
+      </motion.div>
 
-  {/* Desktop: grid */}
-  <div className="hidden sm:grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-10 justify-items-center">
-    {categories.map((cat) => (
-      <Link
-        key={cat.category_id}
-        href={`/category/${cat.category_id}`}
-        className="flex flex-col items-center group cursor-pointer w-24"
-      >
-        <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center transition group-hover:bg-gray-200 shadow-sm">
-          <Image
-            src={cat.category_image}
-            alt={cat.category_name}
-            width={48}
-            height={48}
-            className="object-contain"
-          />
-        </div>
-        <p className="mt-3 text-sm text-gray-700 text-center font-medium group-hover:text-gray-900">
-          {cat.category_name}
-        </p>
-      </Link>
-    ))}
-  </div>
-</div>
-
+      {/* Fade edges */}
+      <div className="absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-white to-transparent pointer-events-none" />
+      <div className="absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-white to-transparent pointer-events-none" />
+    </div>
   );
 };
 
