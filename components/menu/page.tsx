@@ -26,13 +26,14 @@ const CategoryPage = () => {
         {categories.map((cat) => {
           const imageSrc = cat.category_image || defaultImage;
           return (
-            <Link
-              key={cat.category_id}
-              href={`/category/${cat.category_id}`}
-              className="flex flex-col items-center flex-shrink-0 w-24 group"
-            >
-              <div key={cat.category_id} className="p-3">
-                {/* 🟢 Category мөр */}
+
+            <div key={cat.category_id} className="p-3">
+              {/* 🟢 Category мөр */}
+              <Link
+                key={cat.category_id}
+                href={`/category/${cat.category_id}?sub=${null}`}
+
+              >
                 <div className="flex items-center gap-3">
                   <Image
                     src={imageSrc}
@@ -45,26 +46,32 @@ const CategoryPage = () => {
                     {cat.category_name}
                   </span>
                 </div>
+              </Link>
 
-                {/* 🔵 Subcategory жагсаалт */}
-                {cat.subcategories?.length > 0 && (
-                  <div className="mt-2 ml-14 text-sm text-gray-600">
-                    {cat.subcategories.map((sub: any) => (
+              {/* 🔵 Subcategory жагсаалт */}
+              {cat.subcategories?.length > 0 && (
+
+                <div className="mt-2 ml-14 text-sm text-gray-600">
+                  {cat.subcategories.map((sub: any) => (
+                    <Link
+                      key={cat.category_id}
+                      href={`/category/${cat.category_id}?sub${sub.id}`}
+                    >
                       <div
                         key={sub.id}
                         className="hover:text-blue-600 transition p-1 cursor-pointer"
                       >
                         {sub.name}
                       </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </Link>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
           )
         })}
       </div>
-    </div>
+    </div >
   );
 };
 

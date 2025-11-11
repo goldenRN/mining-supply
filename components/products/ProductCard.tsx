@@ -2,89 +2,97 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingCart } from "lucide-react";
+import { LucideShoppingBasket } from "lucide-react";
+import { useCart } from "@/app/context/CartContext";
+import no_image from "/img/default_logo.png";
+
+interface Product {
+  id: number;
+  name: string;
+  price?: number;
+  brand_name?: string;
+  category_name?: string;
+  images?: { id: number; image_url: string }[];
+}
 
 type ProductProps = {
-  product: {
-    id: number;
-    product_name: string;
-    product_image: string;
-    price: number;
-    discount_price?: number | null;
-    category_name?: string;
-  };
+  products: Product[];
 };
 
-export default function ProductCard({ product }: ProductProps) {
-  const {
-    id,
-    product_name,
-    product_image,
-    price,
-    discount_price,
-    category_name,
-  } = product;
+export default function ProductCard({ products }: ProductProps) {
+  const { addToCart } = useCart();
 
   return (
-    <div className="group relative bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden border border-gray-100">
-      {/* Image Section */}
-      <Link href={`/product/${id}`}>
-        <div className="relative w-full h-56 overflow-hidden">
-          <Image
-            src={product_image || "/no-image.png"}
-            alt={product_name}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
-          />
-          {discount_price && (
-            <span className="absolute top-3 left-3 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-full shadow">
-              -{Math.round(((price - discount_price) / price) * 100)}%
-            </span>
-          )}
-        </div>
-      </Link>
+    <div
+      className="
+        grid 
+        gap-6 
+        sm:gap-7
+        md:gap-8
+        [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))]
+      "
+    >
+      {products?.map((product) => {
+        const imageUrl =
+          product.images && product.images.length > 0
+            ? product.images[0].image_url
+            : no_image.src;
 
-      {/* Product Info */}
-      <div className="p-4 flex flex-col gap-2">
-        {category_name && (
-          <p className="text-xs text-gray-400 uppercase tracking-wide">
-            {category_name}
-          </p>
-        )}
-        <Link
-          href={`/product/${id}`}
-          className="text-gray-800 font-medium text-sm line-clamp-2 group-hover:text-blue-700 transition"
-        >
-          {product_name}
-        </Link>
+        return (
+          <Link key={product.id} href={`/product/${product.id}`}>
+            <div className="rounded-xl border border-gray-200 shadow hover:shadow-lg hover:scale-[1.02] transition duration-300 flex flex-col bg-white">
+              <div className="relative w-full aspect-square overflow-hidden rounded-t-xl bg-slate-100">
+                <Image
+                  src={imageUrl}
+                  alt={product.name}
+                  width={300}
+                  height={300}
+                  className="object-cover w-full h-full hover:scale-105 transition-transform duration-500"
+                />
+              </div>
 
-        {/* Price */}
-        <div className="flex items-center gap-2 mt-1">
-          {discount_price ? (
-            <>
-              <p className="text-lg font-semibold text-red-500">
-                ₮{discount_price.toLocaleString()}
-              </p>
-              <p className="text-sm text-gray-400 line-through">
-                ₮{price.toLocaleString()}
-              </p>
-            </>
-          ) : (
-            <p className="text-lg font-semibold text-gray-800">
-              ₮{price.toLocaleString()}
-            </p>
-          )}
-        </div>
+              <div className="px-3 py-3 flex flex-col flex-grow justify-between">
+                <div>
+                  <h3 className="font-normal text-gray-800 text-base line-clamp-1">
+                    {product.name}
+                  </h3>
+                  <p className="text-sm text-gray-500 line-clamp-1">
+                    {product.brand_name || ""}{" "}
+                    {product.category_name
+                      ? `• ${product.category_name}`
+                      : ""}
+                  </p>
+                </div>
 
-        {/* Add to Cart */}
-        <button
-          className="mt-2 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 rounded-xl transition"
-          onClick={() => console.log("Add to cart:", id)}
-        >
-          <ShoppingCart size={16} />
-          Сагсанд нэмэх
-        </button>
-      </div>
+                <div className="flex items-center justify-between mt-3">
+                  <span className="font-bold text-[#1d3b86]">
+                    {product.price
+                      ? `${product.price.toLocaleString()}₮`
+                      : "Үнэ тодорхойгүй"}
+                  </span>
+                  <button
+                    type="button"
+                    className="bg-[#d49943] hover:bg-[#1d3b86] text-white p-2 rounded-full shadow-md transition"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      addToCart({
+                        id: product.id,
+                        name: product.name,
+                        price: product.price ?? 0,
+                        image_url: imageUrl,
+                        quantity: 1,
+                      });
+                    }}
+                  >
+                    <LucideShoppingBasket size={18} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </Link>
+        );
+      })}
     </div>
   );
 }
