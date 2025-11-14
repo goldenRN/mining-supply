@@ -8,12 +8,14 @@ import {
   PhoneCallIcon,
   SearchIcon,
   XIcon,
+  ShoppingBasketIcon,
 } from "lucide-react";
 import { useState } from "react";
 import logo_v from "/img/ms_logo_white.png";
-import CategoryPage from "./menu/page";
-import CategoryMenu from "./menu/topMenu";
+import CategoryPage from "../menu/page";
+import CategoryMenu from "./topMenu";
 import { useCart } from '@/app/context/CartContext';
+import SearchBar from "./SearchBar";
 
 export default function Navbar() {
   const [openMenu, setOpenMenu] = useState(false);
@@ -29,9 +31,9 @@ export default function Navbar() {
     <header className="w-full shadow-lg border-b border-gray-200 sticky top-0 z-50">
       {/* --- Top bar --- */}
       <div className="h-12 bg-blue-900
-       text-white flex items-center justify-between px-6 py-2 text-sm"> 
+       text-white flex items-center justify-between px-6 py-2 text-sm">
 
-      {/* <div className="h-12 bg-gradient-to-b from-[#1d3b86] via-[#3f6cb8] to-[#1d3b86]
+        {/* <div className="h-12 bg-gradient-to-b from-[#1d3b86] via-[#3f6cb8] to-[#1d3b86]
        text-white flex items-center justify-between px-6 py-2 text-sm"> */}
 
         <Link href="/">
@@ -67,14 +69,15 @@ export default function Navbar() {
 
           {/* 🔎 Search + Cart */}
           <div className="flex flex-row justify-between w-1/3">
-            <div className="flex items-center bg-gray-100 rounded-full px-4 py-2 w-full md:w-3/4 shadow-inner">
+            {/* <div className="flex items-center bg-gray-100 rounded-full px-4 py-2 w-full md:w-3/4 shadow-inner">
               <SearchIcon size={18} className="text-gray-500 mr-2" />
               <input
                 type="text"
                 placeholder="Бараа хайх..."
                 className="bg-transparent flex-1 outline-none text-gray-700 placeholder-gray-500"
               />
-            </div>
+            </div> */}
+            <SearchBar />
             <div className="flex items-center gap-3 ml-5">
               <Link
                 href="/basket"
@@ -84,12 +87,12 @@ export default function Navbar() {
               >
                 <div className="relative">
                   <LucideShoppingBasket
-                    size={20}
+                    size={18}
                     className="transition-transform duration-300 group-hover:scale-110"
                   />
                   {cart.length > 0 && (
                     <span
-                      className="absolute -top-2 -right-2 bg-yellow-600 
+                      className="absolute -top-2 -right-2 bg-red-600 
                      text-white text-[11px] font-semibold px-1.5 py-[1px] rounded-full shadow"
                     >
                       {cart.length}
@@ -100,16 +103,8 @@ export default function Navbar() {
               </Link>
             </div>
 
-            {/* <div className="flex items-center gap-2">
-              <Link
-                href="/basket"
-                className="flex items-center gap-2 bg-gradient-to-b from-[#1d3b86] via-[#3f6cb8] to-[#1d3b86]
-               hover:bg-blue-700 text-white px-4 py-2 rounded-2xl font-light shadow-md transition"
-              >
-                <ShoppingBasketIcon size={18} />
-               
-              </Link>
-            </div> */}
+
+           
           </div>
         </div>
       </nav>
@@ -126,7 +121,7 @@ export default function Navbar() {
                   <XIcon size={22} />
                 </button>
               </div>
-              <CategoryPage />
+              <CategoryPage onCloseMenu={() => setOpenMenu(false)} />
             </div>
           </>
         )

@@ -87,12 +87,12 @@ export default function BasketPage() {
 
             <button
               onClick={clearCart}
-              className="w-full bg-gray-200 text-gray-700 py-2 rounded-lg mt-4 hover:bg-gray-300"
+              className="w-full bg-black text-white py-2 rounded-lg mt-4 hover:bg-gray-500"
             >
               Сагс хоослох
             </button>
 
-            <button className="w-full bg-black text-white py-3 rounded-lg mt-6 font-medium flex justify-center items-center space-x-2 hover:bg-green-800">
+            <button className="w-full bg-yellow-600 text-white py-3 rounded-lg mt-6 font-medium flex justify-center items-center space-x-2 hover:bg-yellow-600/70">
               <span>Худалдан авалтыг үргэлжлүүлэх</span>
               <span>→</span>
             </button>

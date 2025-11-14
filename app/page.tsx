@@ -8,6 +8,7 @@ import Slider from "@/components/common/Slider";
 import BubbleCategory from "@/components/menu/bubbleCategory";
 
 export default function Home() {
+  const homeRef = useRef<HTMLDivElement>(null);
   const allRef = useRef<HTMLDivElement>(null);
   const latestRef = useRef<HTMLDivElement>(null);
   const popularRef = useRef<HTMLDivElement>(null);
@@ -19,7 +20,8 @@ export default function Home() {
       const customEvent = e as CustomEvent<string>;
       const sectionId = customEvent.detail;
       const refMap: Record<string, React.RefObject<HTMLDivElement>> = {
-        home: allRef,
+        home: homeRef,
+        all: allRef,
         new: latestRef,
         best: popularRef,
         brand: brandRef,
@@ -35,7 +37,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main ref={homeRef} className="min-h-screen bg-gray-50">
       <div className="mb-5">
         <Slider />
       </div>

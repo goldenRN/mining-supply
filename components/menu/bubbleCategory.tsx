@@ -51,7 +51,7 @@ const BubbleCategory = () => {
           return (
             <Link
               key={cat.category_id}
-              href={`/category/${cat.category_id}`}
+              href={`/category/${cat.category_id}?sub=${null}?catName=${cat.category_name}?subcatName=${null}`}
               className="flex flex-col items-center flex-shrink-0 w-24 group"
             >
               <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center transition-all duration-300 group-hover:bg-gray-200 shadow-md overflow-hidden">

@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import Navbar from '@/components/Navbar';
+import Navbar from '@/components/header/Navbar';
 import Footer from '@/components/Footer';
 import { CartProvider } from '@/app/context/CartContext';
 
