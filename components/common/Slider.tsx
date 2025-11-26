@@ -108,7 +108,7 @@ export default function BannerCarousel() {
   // ⛔️ Хоосон үед
   if (loading) {
     return (
-      <div className="w-full h-[300px] md:h-[400px] flex items-center justify-center bg-gray-100 rounded-2xl">
+      <div className="w-full h-[300px] md:h-[400px] flex items-center justify-center bg-gray-100">
         <p className="text-gray-500">Баннер ачаалж байна...</p>
       </div>
     );
@@ -116,7 +116,7 @@ export default function BannerCarousel() {
 
   if (!banners.length) {
     return (
-      <div className="w-full h-[300px] md:h-[400px] flex items-center justify-center bg-gray-100 rounded-2xl">
+      <div className="w-full h-[300px] md:h-[400px] flex items-center justify-center bg-gray-100 ">
         <p className="text-gray-500">Баннер олдсонгүй</p>
       </div>
     );

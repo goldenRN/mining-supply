@@ -62,7 +62,7 @@ export default function Home() {
         <ProductGrid type="popular" title="Эрэлттэй бараа" />
       </section>
 
-      <div ref={brandRef} className="scroll-mt-24">
+      <div ref={brandRef} className="scroll-mt-24 pb-10">
         <BrandList />
       </div>
     </main>

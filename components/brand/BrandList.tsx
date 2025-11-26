@@ -36,9 +36,12 @@ export default function BrandList() {
         }
     };
 
-    const filtered = brands.filter((b) =>
-        b.name.toLowerCase().includes(q.trim().toLowerCase())
-    );
+    const filtered = (brands || []).filter((b) => {
+        const name = (b?.name ?? "").toLowerCase();
+        const search = q.trim().toLowerCase();
+        return name.includes(search);
+    });
+
 
     const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
     const pageItems = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);

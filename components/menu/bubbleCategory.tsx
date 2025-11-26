@@ -54,13 +54,13 @@ const BubbleCategory = () => {
               href={`/category/${cat.category_id}?sub=${null}?catName=${cat.category_name}?subcatName=${null}`}
               className="flex flex-col items-center flex-shrink-0 w-24 group"
             >
-              <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center transition-all duration-300 group-hover:bg-gray-200 shadow-md overflow-hidden">
+              <div className="w-20 h-20 rounded-full  bg-gray-100 flex items-center justify-center transition-all duration-300 group-hover:bg-gray-200 shadow-md overflow-hidden">
                 <Image
                   src={imageSrc}
                   alt={cat.category_name || "Ангилал"}
                   width={60}
                   height={60}
-                  className="object-contain"
+                  className="object-contain p-2"
                 />
               </div>
               <p className="mt-3 text-sm text-gray-700 text-center font-medium group-hover:text-gray-900">
@@ -72,8 +72,8 @@ const BubbleCategory = () => {
       </motion.div>
 
       {/* Fade edges */}
-      <div className="absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-white to-transparent pointer-events-none" />
-      <div className="absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-white to-transparent pointer-events-none" />
+      <div className="absolute left-0 top-0 h-full w-16 pointer-events-none" />
+      <div className="absolute right-0 top-0 h-full w-16 pointer-events-none" />
     </div>
   );
 };

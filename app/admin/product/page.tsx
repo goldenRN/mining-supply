@@ -3,10 +3,11 @@ import React, { useEffect, useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { PlusCircle, RefreshCcw, Edit, Trash2 } from "lucide-react";
+import { RefreshCcw, Edit, Trash2, Plus } from "lucide-react";
 import AddProductModal from "./AddProductModal";
 import axios from "axios";
 import ImageViewerModal from "./ImageViewerModal";
+import ProductVariantModal from "./ProductVariantModal"; 
 
 interface Product {
   id: number;
@@ -34,6 +35,18 @@ const ProductPage = () => {
   const [loading, setLoading] = useState(false);
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [images, setImages] = useState<string[]>([]);
+
+  // ✅ Variant modal states
+  const [variantOpen, setVariantOpen] = useState(false);
+  const [variantProductId, setVariantProductId] = useState<number | null>(null);
+  const [variantProductName, setVariantProductName] = useState<string | null>(null);
+
+  const openVariantModal = (productId: number, productName: string) => {
+    setVariantProductId(productId);
+    setVariantProductName(productName);
+    setVariantOpen(true);
+  };
+
   const fetchProducts = async () => {
     try {
       setLoading(true);
@@ -60,6 +73,7 @@ const ProductPage = () => {
     data.sort((a, b) => {
       const aVal = a[sortField];
       const bVal = b[sortField];
+
       if (typeof aVal === "number" && typeof bVal === "number") {
         return sortOrder === "asc" ? aVal - bVal : bVal - aVal;
       }
@@ -67,8 +81,10 @@ const ProductPage = () => {
         ? String(aVal).localeCompare(String(bVal))
         : String(bVal).localeCompare(String(aVal));
     });
+
     return data;
   }, [products, search, sortField, sortOrder]);
+
   const handleViewImages = async (productId: number) => {
     try {
       const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/productimg/${productId}`);
@@ -79,6 +95,7 @@ const ProductPage = () => {
       alert("Зураг татаж чадсангүй!");
     }
   };
+
   const handleSort = (field: keyof Product) => {
     if (sortField === field) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -90,6 +107,7 @@ const ProductPage = () => {
 
   const handleDelete = async (id: number) => {
     if (!confirm("⚠️ Энэ барааг устгах уу?")) return;
+
     try {
       await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/product/${id}`);
       await fetchProducts();
@@ -111,11 +129,19 @@ const ProductPage = () => {
               onChange={(e) => setSearch(e.target.value)}
               className="max-w-sm"
             />
+
             <Button onClick={fetchProducts} variant="outline" disabled={loading} className="bg-blue-900">
               <RefreshCcw size={16} className={loading ? "animate-spin text-white" : "text-white"} />
             </Button>
-            <Button onClick={() => { setEditData(null); setOpen(true); }} className="flex gap-2 items-center bg-yellow-600">
-              <PlusCircle size={18} /> Шинэ бараа
+
+            <Button
+              onClick={() => {
+                setEditData(null);
+                setOpen(true);
+              }}
+              className="flex gap-2 items-center bg-yellow-600"
+            >
+              <Plus size={18} /> Шинэ бараа
             </Button>
           </div>
         </CardHeader>
@@ -124,7 +150,6 @@ const ProductPage = () => {
           <table className="w-full border-collapse min-w-[1000px]">
             <thead>
               <tr className="bg-gray-100 text-left">
-                {/* <th className="py-3 px-4 text-sm">Зураг</th> */}
                 {[
                   { key: "name", label: "Нэр" },
                   { key: "category_name", label: "Ангилал" },
@@ -143,18 +168,17 @@ const ProductPage = () => {
                     className="py-3 px-4 cursor-pointer hover:bg-gray-200 whitespace-nowrap text-xs"
                   >
                     {col.label}{" "}
-                    {sortField === col.key &&
-                      (sortOrder === "asc" ? "▲" : "▼")}
+                    {sortField === col.key && (sortOrder === "asc" ? "▲" : "▼")}
                   </th>
                 ))}
                 <th className="py-3 px-4 text-center text-xs">Үйлдэл</th>
               </tr>
             </thead>
+
             <tbody>
               {filteredProducts.length > 0 ? (
                 filteredProducts.map((p) => (
                   <tr key={p.id} className="border-b hover:bg-gray-50">
-
                     <td className="py-2 px-4 text-xs">{p.name}</td>
                     <td className="py-2 px-4 text-xs">{p.category_name}</td>
                     <td className="py-2 px-4 text-xs">{p.subcategory_name}</td>
@@ -162,13 +186,25 @@ const ProductPage = () => {
                     <td className="py-2 px-4 text-xs">{p.unit_name}</td>
                     <td className="py-2 px-4 text-xs">{p.status_name}</td>
                     <td className="py-2 px-4 text-xs">{p.type_name}</td>
-                    <td className="py-2 px-4 text-xs">{p.price.toLocaleString()}₮</td>
+                    <td className="py-2 px-4 text-xs">
+                      {p.price.toLocaleString()}₮
+                    </td>
                     <td className="py-2 px-4 text-xs">{p.stock}</td>
                     <td className="py-2 px-4 text-xs">
                       {new Date(p.created_at).toLocaleDateString()}
                     </td>
+
                     <td className="py-2 px-4 text-center">
                       <div className="flex justify-center gap-2">
+                        {/* ✔ VARIANT НЭМЭХ */}
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => openVariantModal(p.id, p.name)}
+                        >
+                          <Plus size={16} />
+                        </Button>
+
                         <Button
                           size="sm"
                           variant="outline"
@@ -176,6 +212,8 @@ const ProductPage = () => {
                         >
                           🖼️
                         </Button>
+
+                        {/* Бараа засах */}
                         <Button
                           size="sm"
                           variant="outline"
@@ -186,6 +224,8 @@ const ProductPage = () => {
                         >
                           <Edit size={16} />
                         </Button>
+
+                        {/* Бараа устгах */}
                         <Button
                           size="sm"
                           variant="destructive"
@@ -209,12 +249,24 @@ const ProductPage = () => {
         </CardContent>
       </Card>
 
+      {/* Бараа нэмэх / засах */}
       <AddProductModal
         open={open}
         onClose={() => setOpen(false)}
         onRefresh={fetchProducts}
         editData={editData}
       />
+
+      {/* ✔ VARIANT MODAL ЗӨВ АЖИЛЛАДАГ БОЛСОН */}
+      <ProductVariantModal
+        open={variantOpen}
+        onClose={() => setVariantOpen(false)}
+        productId={variantProductId}
+        productName={variantProductName}
+        onRefresh={fetchProducts}
+      />
+
+      {/* Зураг харагч */}
       <ImageViewerModal
         open={imageModalOpen}
         onClose={() => setImageModalOpen(false)}

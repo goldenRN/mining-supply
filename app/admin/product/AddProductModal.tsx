@@ -1,6 +1,3 @@
-
-
-
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
@@ -72,7 +69,7 @@ export default function AddProductModal({ open, onClose, onRefresh, editData }: 
                 brand_id: editData.brand_id?.toString() || "",
                 unit_id: editData.unit_id?.toString() || "",
                 status_id: editData.status_id?.toString() || "",
-                type_id: editData.status_id?.toString() || "",
+                type_id: editData.type_id?.toString() || "",
                 images: [],
             }));
 

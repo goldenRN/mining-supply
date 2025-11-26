@@ -50,7 +50,7 @@ export default function Navbar() {
 
       {/* --- Main navigation --- */}
       <nav className="bg-white text-blue-900">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between px-6 py-3 gap-4">
+        <div className="w-full mx-auto flex flex-col md:flex-row items-center justify-between px-6 py-3 gap-4">
           {/* ☰ Menu and CategoryMenu */}
 
           <div className="flex items-center gap-3">

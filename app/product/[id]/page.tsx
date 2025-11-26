@@ -142,7 +142,7 @@ export default function ProductPage({ params }: Props) {
                             {product.price ? `${Number(product.price).toLocaleString()}₮` : 'Үнэ тодорхойгүй'}
                         </div>
                         <div className="text-sm text-gray-500">
-                            {product.stock && product.stock > 0 ? <span className="text-green-600">Бэлэн: {product.stock}</span> : <span className="text-red-500">Бэлэнгүй</span>}
+                            {product.stock && product.stock > 0 ? <span className="text-green-600">Бэлэн: {product.stock}</span> : <span className="text-red-500">Захилгаар ирнэ</span>}
                         </div>
                     </div>
 
@@ -177,7 +177,7 @@ export default function ProductPage({ params }: Props) {
                             Сагсанд нэмэх
                         </button>
 
-                        <button
+                        {/* <button
                             className="flex items-center gap-2 border px-3 py-2 rounded-md text-gray-700 hover:bg-gray-50"
                             onClick={() => {
                                 const fav = JSON.parse(localStorage.getItem('fav') || '[]');
@@ -191,7 +191,7 @@ export default function ProductPage({ params }: Props) {
                             }}
                         >
                             <Heart size={16} /> Хадгалах
-                        </button>
+                        </button> */}
                     </div>
 
                     {/* Short specs / meta */}
@@ -216,19 +216,7 @@ export default function ProductPage({ params }: Props) {
                 <div className="mt-12">
                     <h3 className="text-xl font-semibold mb-4">Төcтэй бараа</h3>
                     <ProductCard products={related} />
-                    {/* <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                        {related.map((p) => (
-                            <Link key={p.id} href={`/product/${p.id}`} className="rounded-lg border p-2 hover:shadow-md transition">
-                                <div className="relative w-full aspect-square bg-slate-100 overflow-hidden rounded">
-                                    {p.image_urls && p.image_urls.length > 0 ? (
-                                        <Image src={p.image_urls[0]} alt={p.name} fill className="object-cover" />
-                                    ) : <div className="flex items-center justify-center text-gray-400">Зураггүй</div>}
-                                </div>
-                                <div className="mt-2 text-sm font-medium text-gray-800 line-clamp-1">{p.name}</div>
-                                <div className="mt-1 text-sm text-[#1d3b86] font-semibold">{p.price ? `${Number(p.price).toLocaleString()}₮` : '-'}</div>
-                            </Link>
-                        ))}
-                    </div> */}
+                   
                 </div>
             )}
         </div>

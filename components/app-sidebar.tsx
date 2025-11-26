@@ -67,6 +67,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <Newspaper className='mr-2 h-8 w-4' />
                 <Link href='/admin/product'>Барааны мэдээлэл</Link>
               </CommandItem>
+              <CommandItem className={isActive('/admin/order') ? 'bg-muted text-blue-600' : ''}>
+                <Newspaper className='mr-2 h-8 w-4' />
+                <Link href='/admin/order'>Захиалгын мэдээлэл</Link>
+              </CommandItem>
               <CommandItem className={isActive('/admin/banner') ? 'bg-muted text-blue-600' : ''}>
                 <ImageIcon className='mr-2 h-8 w-4' />
                 <Link href='/admin/banner'>Баннер</Link>
